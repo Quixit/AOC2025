@@ -9,4 +9,5 @@ foreach (var line in input)
 }
 
 
-Console.WriteLine($"Result: {dial.ZeroCount}");
+Console.WriteLine($"Stop Zero: {dial.ZeroCount}");
+Console.WriteLine($"Hit Zero: {dial.HitZero}");
