@@ -2,7 +2,7 @@
 
 namespace D04;
 
-public class GridEvaluator(bool[][] grid)
+public class GridEvaluator(bool[][] grid, bool allowRemove)
 {
     public long Accessible
     {
@@ -33,7 +33,12 @@ public class GridEvaluator(bool[][] grid)
         count += CheckDownRight(x, y);
 
         if (count < 4)
+        {
             Accessible++;
+            
+            if (allowRemove)
+                grid[x][y] = false;
+        }
     }
 
     public int CheckUpLeft(int x, int y)
