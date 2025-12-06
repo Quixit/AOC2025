@@ -3,11 +3,16 @@
 using D03;
 
 var input = File.ReadAllLines("input.txt").Select(l => l.Select(s => Convert.ToInt64($"{s}")));
-var calculator = new JoltageCalculator();
+var calculator = new JoltageCalculator(2);
+var largeCalculator = new JoltageCalculator(12);
 
 foreach (var bank in input)
 {
-    calculator.AddBank(new ArraySegment<long>(bank.ToArray()), 2);
+    var bankArray = bank.ToArray();
+    
+    calculator.AddBank(new ArraySegment<long>(bankArray));
+    largeCalculator.AddBank(new ArraySegment<long>(bankArray));
 }
 
-Console.WriteLine($"Total Joltage: {calculator.Total}");
+Console.WriteLine($"Total Joltage x2: {calculator.Total}");
+Console.WriteLine($"Total Joltage x12: {largeCalculator.Total}");

@@ -1,10 +1,10 @@
 ﻿namespace D03;
 
-public class JoltageCalculator
+public class JoltageCalculator(int values)
 {
     public long Total { get; set; } = 0;
-
-    public void AddBank(ArraySegment<long> bank, int values)
+    
+    public void AddBank(ArraySegment<long> bank)
     {
         var total = "";
         var slice = bank;
