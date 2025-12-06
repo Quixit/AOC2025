@@ -8,13 +8,18 @@ public class Evaluator
         get;
         set;
     }
+    
+    public long ExtendedInvalidTotal {
+        get;
+        set;
+    }
 
     public void AddRange(Tuple<long,long> input)
     {
         var first = input.Item1;
         var last = input.Item2;
 
-        Console.WriteLine($"Evaluating {first} to {last}");
+        //Console.WriteLine($"Evaluating {first} to {last}");
         
         for (var i = first; i <= last; i++)
         {
@@ -28,25 +33,32 @@ public class Evaluator
         {
             if (input.Substring(0, input.Length / 2) == input.Substring(input.Length / 2))
             {
-                Console.WriteLine($"{input} Is Invalid");
+                //Console.WriteLine($"{input} Is Invalid");
                 InvalidTotal += Convert.ToInt64(input);
             }
         }
 
-        // for (var chunk = 1; chunk <= input.Length / 2; chunk++)
-        // {
-        //     for (var start = 0; start <= input.Length - chunk * 2; start++)
-        //     {
-        //         var first = input.Substring(start, chunk);
-        //         var second = input.Substring(start + chunk, chunk);
-        //
-        //         if (first == second)
-        //         {
-        //             Console.WriteLine($"  Found invalid chunk: {first} at position {start} of {input}");
-        //             InvalidTotal += Convert.ToInt64(input);
-        //             return;
-        //         }
-        //     }
-        // }
+        for (var chunkLen = 1; chunkLen <= input.Length / 2; chunkLen++)
+        {
+            if (input.Length % chunkLen == 0)
+            {
+                var chunk = input.Substring(0, chunkLen);
+
+                var isInvalid = true;
+
+                for (var i = chunkLen; i <= input.Length - chunkLen; i += chunkLen)
+                {
+                    if (chunk != input.Substring(i, chunkLen))
+                        isInvalid = false;
+                }
+
+                if (isInvalid)
+                {
+                    //Console.WriteLine($"{input} Is Extended Invalid with chunk {chunk}");
+                    ExtendedInvalidTotal += Convert.ToInt64(input);
+                    return;
+                }
+            }
+        }
     }
 }

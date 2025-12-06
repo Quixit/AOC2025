@@ -13,3 +13,4 @@ foreach (var item in input)
 }
 
 Console.WriteLine($"Invalid Sum: {evaluator.InvalidTotal}");
+Console.WriteLine($"Extended Invalid Sum: {evaluator.ExtendedInvalidTotal}");
