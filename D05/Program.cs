@@ -34,46 +34,30 @@ foreach (var item in items)
     }
 }
 
-//reduce overlapping ranges
-var reducedFresh = new List<LongRange>();
+fresh.Sort();
 
-foreach (var freshItem in fresh)
+var last = fresh.First();
+var fullTotal = 1 + last.End - last.Start;
+
+for (var i = 1; i < fresh.Count; i++)
 {
-    var intersects = new List<LongRange>();
+    var distance = 0L;
     
-    foreach (var reducedItem in reducedFresh)
+    if (last.End >= fresh[i].Start)
     {
-        //intersects with.
-        if (freshItem.Start <= reducedItem.End  && freshItem.Start >= reducedItem.Start ||
-            freshItem.End  >= reducedItem.Start && freshItem.End <= reducedItem.End)
-        {
-            intersects.Add(reducedItem);
-        }
-    }
-
-    if (intersects.Any())
-    {
-        var minStart = intersects.Min(x => x.Start);
-        var maxEnd = intersects.Max(x => x.End);
-        
-        reducedFresh.Add(new LongRange(minStart, maxEnd));
-        
-        foreach (var intersectItem in intersects)
-            reducedFresh.Remove(intersectItem);
+        distance = fresh[i].End - last.End; //Space not accounted for only. 
     }
     else
     {
-        reducedFresh.Add(freshItem);
+        distance = 1 + fresh[i].End - fresh[i].Start; //No overlap.
     }
-}
 
-var fullTotal = 0L;
-
-foreach (var reducedItem in reducedFresh)
-{
-    //Console.WriteLine($"{reducedItem.Start}-{reducedItem.End}");
-    
-    fullTotal += (reducedItem.End - reducedItem.Start + 1L);
+    // It is theoretically possible that set 2 is shorter than set 1. In which case we ignore it.
+    if (distance > 0)
+    {
+        fullTotal += distance;
+        last = fresh[i];
+    }
 }
 
 Console.WriteLine($"Fresh Items: {total}");
