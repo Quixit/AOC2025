@@ -39,24 +39,29 @@ var reducedFresh = new List<LongRange>();
 
 foreach (var freshItem in fresh)
 {
-    var found = false;
+    var intersects = new List<LongRange>();
     
     foreach (var reducedItem in reducedFresh)
     {
-        if (freshItem.Start <= reducedItem.End  && freshItem.Start >= reducedItem.Start )
+        //intersects with.
+        if (freshItem.Start <= reducedItem.End  && freshItem.Start >= reducedItem.Start ||
+            freshItem.End  >= reducedItem.Start && freshItem.End <= reducedItem.End)
         {
-            reducedItem.End =  freshItem.End;
-            found = true;
-        }
-        
-        if (freshItem.End  >= reducedItem.Start && freshItem.End <= reducedItem.End)
-        {
-            reducedItem.Start = freshItem.Start;
-            found = true;
+            intersects.Add(reducedItem);
         }
     }
 
-    if (!found)
+    if (intersects.Any())
+    {
+        var minStart = intersects.Min(x => x.Start);
+        var maxEnd = intersects.Max(x => x.End);
+        
+        reducedFresh.Add(new LongRange(minStart, maxEnd));
+        
+        foreach (var intersectItem in intersects)
+            reducedFresh.Remove(intersectItem);
+    }
+    else
     {
         reducedFresh.Add(freshItem);
     }
@@ -66,6 +71,8 @@ var fullTotal = 0L;
 
 foreach (var reducedItem in reducedFresh)
 {
+    //Console.WriteLine($"{reducedItem.Start}-{reducedItem.End}");
+    
     fullTotal += (reducedItem.End - reducedItem.Start + 1L);
 }
 
