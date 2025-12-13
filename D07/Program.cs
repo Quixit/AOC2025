@@ -3,7 +3,7 @@
 var raw = File.ReadAllLines("input.txt");
 var splits = 0L;
 
-int start = -1, space = -2, splitter = -3;
+long start = -1, space = -2, splitter = -3;
 
 var input = raw.Select(i => i.Select(c =>
 {
